@@ -17,14 +17,9 @@ During build, it checks what branch it is executed on and searches labels in rep
 - name: Fixed Issues Labeler
   uses: gh-bot/fix-labeler@master
   with:
-    # Personal access token (PAT) used to fetch the repository. The PAT is configured
-    # with the local git config, which enables your scripts to run authenticated git
-    # commands. The post-job step removes the PAT.
-    #
-    # We recommend using a service account with the least permissions necessary. Also
-    # when generating a new PAT, select the least scopes necessary.
-    #
-    # [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
+    # Personal access token (PAT) used to fetch the repository. By default the PAT is
+    # configured with the local access config, which enables your scripts to run
+    # authenticated commands.
     #
     # Default: ${{ github.token }}
     token: ''
@@ -33,9 +28,12 @@ During build, it checks what branch it is executed on and searches labels in rep
     # not present, issues will be annotated with a label named as current branch, 
     # "master" or "develop" for example. If requested label is not found in the 
     # repository, nothing is annotated
+    #
     # Default: Current branch name
     label: ''
 
     # Relative path under $GITHUB_WORKSPACE to place the repository
+    #
+    # Default: current directory
     path: ''
 ```
