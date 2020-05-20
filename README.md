@@ -17,16 +17,15 @@ During build, it checks what branch it is executed on and searches labels in rep
 - name: Fixed Issues Labeler
   uses: gh-bot/fix-labeler@master
   with:
-    # Personal access token (PAT) used to fetch the repository. By default the PAT is
-    # configured with the local access config, which enables your scripts to run
-    # authenticated commands.
+    # By default the action is using Personal access token (PAT) used to fetch
+    # the repository.
     #
     # Default: ${{ github.token }}
     token: ''
 
-    # Name of the label to apply to fixed issues. When parameter is 
-    # not present, issues will be annotated with a label named as current branch, 
-    # "master" or "develop" for example. If requested label is not found in the 
+    # Name of the label to apply to fixed issues. When parameter is
+    # not present, issues will be annotated with a label named as current branch,
+    # "master" or "develop" for example. If requested label is not found in the
     # repository, nothing is annotated
     #
     # Default: Current branch name
