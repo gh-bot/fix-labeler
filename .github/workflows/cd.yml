@@ -1,0 +1,33 @@
+name: Create release on push
+
+on:
+  [push]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+      with:
+        fetch-depth: 0
+
+    - name: 'Install'
+      run: npm install 
+
+    - name: 'Build'
+      run: npm run build 
+
+    - name: 'Test'
+      run: npm run test 
+      env:
+        INPUT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Pack'
+      run: npm run pack 
+
+    - name: 'Release'
+      run: npx semantic-release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

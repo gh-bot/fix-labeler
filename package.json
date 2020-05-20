@@ -1,0 +1,62 @@
+{
+  "name": "fix-labeler",
+  "version": "0.0.0",
+  "description": "Merged Issue labeler",
+  "main": "lib/main.js",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc && (tsc -w --preserveWatchOutput & nodemon)",
+    "dev": "npm run build:watch",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "pack": "ncc build",
+    "test": "jest",
+    "release": "npm install && npm run build && npm test && npm run pack",
+    "all": "npm install && npm run build && npm run format && npm run lint && npm run pack && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gh-bot/fix-labeler.git"
+  },
+  "keywords": [
+    "label",
+    "issue",
+    "close",
+    "closes",
+    "closed",
+    "fixed",
+    "fix",
+    "fixes",
+    "resolve",
+    "resolves",
+    "resolved"
+  ],
+  "author": "gh-bot",
+  "bugs": {
+    "url": "https://github.com/gh-bot/fix-labeler/issues"
+  },
+  "homepage": "https://github.com/gh-bot/fix-labeler#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.2.0",
+    "semantic-release": "^17.0.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.38",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@zeit/ncc": "^0.20.5",
+    "dotenv": "^8.2.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-github": "^2.0.0",
+    "eslint-plugin-jest": "^22.21.0",
+    "jest": "^25.5.4",
+    "jest-circus": "^24.9.0",
+    "js-yaml": "^3.13.1",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.2"
+  }
+}
