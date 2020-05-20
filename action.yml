@@ -2,13 +2,13 @@ name: 'Fixed Issues Labeler'
 description: 'This action adds a label with the name of the branch fixed issues' 
 inputs:
   token:
-    description: 'Personal access token (PAT) used to manipulate the repository. [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)'
+    description: 'Personal access token (PAT) used to manipulate the repository.'
     default: ${{ github.token }}
   label:
-    description: 'Name of the label to apply to fixed issues. When parameter is not present, issues
-    will be annotated with a label named as current branch, "master" or 
-    "develop" for example. If requested label is not found in the repository, nothing 
-    is annotated'
+    description: 'Name of the label to apply to fixed issues. When parameter is 
+    not present, issues will be annotated with a label named as current branch, 
+    "master" or "develop" for example. If requested label is not found in the 
+    repository, nothing is annotated'
   path:
     description: 'Relative path under $GITHUB_WORKSPACE to the repository'
     required: false
