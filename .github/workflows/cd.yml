@@ -23,8 +23,8 @@ jobs:
       env:
         INPUT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 'Pack'
-      run: npm run pack 
+    # - name: 'Pack'
+    #   run: npm run pack 
 
     - name: 'Release'
       run: npx semantic-release

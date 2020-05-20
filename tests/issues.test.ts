@@ -4,13 +4,7 @@ async function* getData(): AsyncGenerator<Issue> {
   yield new Issue(['x', 'y', '', '', '3'])
   yield new Issue(['x', 'y', '', '', '0'])
   yield new Issue(['x', 'y', '', '', '4'])
-  yield new Issue([
-    'x',
-    'y',
-    'gh-bot',
-    '3d851f75-0f76-4e63-8e31-f83d5565f760',
-    '5'
-  ])
+  yield new Issue(['x', 'y', 'gh-bot', '3d851f75-0f76-4e63-8e31-f83d5565f760', '5'])
 }
 
 test('test getting IDs', async () => {
