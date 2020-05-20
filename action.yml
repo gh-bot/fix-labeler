@@ -1,6 +1,6 @@
 name: 'Merged Issues Labeler'
 description: >
-'Many workflows create branches to fix [issues](https://help.github.com/en/enterprise/2.16/user/github/managing-your-work-on-github/managing-your-work-with-issues)
+`Many workflows create branches to fix [issues](https://help.github.com/en/enterprise/2.16/user/github/managing-your-work-on-github/managing-your-work-with-issues)
 and work on features. When a bug or a feature is implemented issues are closed 
 with appropriate [commit messages](https://github.blog/2013-01-22-closing-issues-via-commit-messages/)
 and issues are closed when merged into default branch. 
@@ -11,23 +11,23 @@ During build, the action checks what branch it is executed on and searches label
 repository. If label with the same name exists, it will apply it to all 
 issues marked as fixed in commit messages. So when these are merged from branch to branch, 
 it will accumulate all the labels related to these branches. So even cursory look at these
-issues will immediately tell you if the issue is missing in certain branches.'
+issues will immediately tell you if the issue is missing in certain branches.`
 inputs:
   token:
     description: >
-      'Personal access token (PAT) used to manipulate the repository. The PAT is configured
+      `Personal access token (PAT) used to manipulate the repository. The PAT is configured
       with the local git config, which enables your scripts to run authenticated git
       commands. The post-job step removes the PAT.
       We recommend using a service account with the least permissions necessary.
       Also when generating a new PAT, select the least scopes necessary.
-      [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)'
+      [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)`
     default: ${{ github.token }}
   label:
     description: >
-    'Name of the label to apply to fixed issues. When parameter is not present, issues
+    `Name of the label to apply to fixed issues. When parameter is not present, issues
     will be annotated with a label named as current branch, "master" or 
     "develop" for example. If requested label is not found in the repository, nothing 
-    is annotated'
+    is annotated`
   path:
     description: 'Relative path under $GITHUB_WORKSPACE to the repository'
     required: false
