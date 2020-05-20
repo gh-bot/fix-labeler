@@ -9,4 +9,4 @@ This action helps to keep track of these fixes.
 
 During build, it checks what branch it is executed on and searches labels in repository. If label with the same name exists, it will apply it to all issues marked as fixed in commit messages. So when these are merged from branch to branch, labels will accumulate and even cursory look at these issues will immediately tell you if something is amiss.
 
-![Annotated Issues](https://raw.githubusercontent.com/gh-bot/fix-labeler/master/pics/screenshot.png "Annotated Issues Screenshot")
+![Annotated Issues](https://raw.githubusercontent.com/gh-bot/fix-labeler/master/pics/screenshot.png "Annotated Issues")
