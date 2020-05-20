@@ -10,7 +10,7 @@ During build, the action checks what branch it is executed on and searches label
 repository. If label with the same name exists, it will apply it to all 
 issues marked as fixed in commit messages. So when these are merged from branch to branch, 
 it will accumulate all the labels related to these branches. So even cursory look at these
-issues will immediately tell you if the issue is missing in certain branches.' 
+issues will immediately tell you if the issue is missing in certain branches' 
 inputs:
   token:
     description: 'Personal access token (PAT) used to manipulate the repository. The PAT is configured
