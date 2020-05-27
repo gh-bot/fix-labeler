@@ -14,7 +14,7 @@ During build, it checks what branch it is executed on and searches labels in rep
 ## Usage
 
 ```yaml
-- name: Fixed Issues Labeler
+- name: Label Fixed Issues
   uses: gh-bot/fix-labeler@master
   with:
     # By default the action is using Personal access token (PAT) used to fetch
