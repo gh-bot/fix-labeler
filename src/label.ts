@@ -1,5 +1,6 @@
 import * as graphql from './graphql'
 import * as config from './configuration'
+import * as core from '@actions/core'
 
 export interface ILabelInfo {
   id: string
@@ -45,6 +46,7 @@ export async function getLabelInfo(
     labels(first: 100, query: "${match}") { nodes { id color description name } }
   }`
 
+  core.info(`Looking for label: \"${match}\"`)
   return graphql.Query(query).then(async (response) => {
     let payload = response as ILabelsPayload;
     let upper: ILabelInfo | undefined
@@ -76,6 +78,8 @@ export async function exactLabelInfo(
 ): Promise<ILabelInfo | null> {
   const query = `repository(name: "${config.repo}", owner: "${config.owner}") {
                      label(name: "${name}") { id color description name }}`
+
+  core.info(`Looking for label: \"${name}\"`)
 
   return graphql.Query(query).then(async (response) => { 
       return (response as IRepositoryPayload).repository.label
