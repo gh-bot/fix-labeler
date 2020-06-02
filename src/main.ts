@@ -2,8 +2,8 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as config from './configuration'
 import {getCommits, getBranch} from './git'
-import {getLabelledInfo, labelIssues} from './label'
 import {getIssueIds, parseIssues} from './issues'
+import {exactLabelInfo, labelIssues, ILabelInfo, getLabelInfo} from './label'
 
 /**
  * Executes action.
@@ -21,7 +21,13 @@ async function run(): Promise<void> {
       return
     }
 
-    const label = await getLabelledInfo(config.label)
+    // Find label
+    let label: ILabelInfo | null;
+    if (config.label) {
+      label = await exactLabelInfo(config.label)
+    } else {
+      label = await getLabelInfo(branch)
+    }
 
     // Nothing to do if no label
     if (null == label) {
