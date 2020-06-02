@@ -36,3 +36,21 @@ During build, it checks what branch it is executed on and searches labels in rep
     # Default: current directory
     path: ''
 ```
+
+### Token
+
+Unless you need to use specific token with custom access, this parameter could be left out to use default  
+
+### Path
+
+This parameter allows you to specify location of the target repository. The value of this parameter should be the same as the 'path' of [Checkout](https://github.com/marketplace/actions/checkout) action used to get the repository
+
+### Label
+
+This parameter allows to specify name of the label to annotate issues with. If no label provided the action will try to guess the label's name. It will use the following algorithm:
+
+* Check if branch name exactly matches one of the labels in repository. For example if the branch is **`release/1.0.0`** and repository has a label with the same name **"release/1.0.0"**, that label will be used
+
+* Next the action will try to split the name of a branch and look for these parts: A branch name will be split into **"1.0.0"** and **"release"**. The action will first look for  **"1.0.0"** and if not found **"release"**
+
+* If no label found, the action will just do nothing
