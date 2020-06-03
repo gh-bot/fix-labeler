@@ -40,7 +40,7 @@ async function run(): Promise<void> {
     const count = await labelIssues(label, issueIds)
 
     if (0 < count) {
-      core.info(`Successfully labeled ${count} issues`)
+      core.info(`Successfully labeled ${count} issue(s)`)
     } else {
       core.info(`Nothing to label`)
     }
