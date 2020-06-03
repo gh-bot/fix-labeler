@@ -1,6 +1,6 @@
 {
   "name": "fix-labeler",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "description": "Merged Issue labeler",
   "main": "lib/main.js",
   "private": true,
