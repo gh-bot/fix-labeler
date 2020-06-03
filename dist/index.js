@@ -2045,7 +2045,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getIssueIds = exports.parseIssues = exports.Issue = void 0;
+exports.getIssueInfos = exports.parseIssues = exports.Issue = void 0;
 const config = __importStar(__webpack_require__(618));
 const graphql_1 = __webpack_require__(138);
 class Issue {
@@ -2092,8 +2092,8 @@ function parseIssues(iterator) {
     });
 }
 exports.parseIssues = parseIssues;
-function getIssueIds(iterator) {
-    return __asyncGenerator(this, arguments, function* getIssueIds_1() {
+function getIssueInfos(iterator) {
+    return __asyncGenerator(this, arguments, function* getIssueInfos_1() {
         let promise = null;
         const set = new Set();
         do {
@@ -2105,7 +2105,7 @@ function getIssueIds(iterator) {
             const builder = Array();
             while (!next.done && config.MAX_QUERY_LENGTH > builder.length) {
                 if (!set.has(next.value.number)) {
-                    builder.push(`_${next.value.number}: issue(number: ${next.value.number}) { id }`);
+                    builder.push(`_${next.value.number}: issue(number: ${next.value.number}) { id number title }`);
                     set.add(next.value.number);
                 }
                 next = yield __await(iterator.next());
@@ -2125,13 +2125,13 @@ function getIssueIds(iterator) {
                     const response = data[property];
                     if (!response)
                         continue;
-                    yield yield __await(response.id);
+                    yield yield __await(response);
                 }
             }
         } while (null != promise);
     });
 }
-exports.getIssueIds = getIssueIds;
+exports.getIssueInfos = getIssueInfos;
 //# sourceMappingURL=issues.js.map
 
 /***/ }),
@@ -2313,29 +2313,21 @@ const label_1 = __webpack_require__(525);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            // Get Path to repository
-            core.info(`Analyzing repository at ${config.path}`);
             // Name of the label
             if (!config.branch) {
-                core.setFailed(`No repository found at path '${config.path}'`);
+                core.setFailed(`No repository found at path '${config.path}', quitting...`);
                 return;
             }
-            // Find label
-            const label = yield label_1.getLabelInfo(config.label);
-            // Nothing to do if no label
-            if (null == label) {
-                core.info(`No suitable label found in repository '${github.context.repo.owner}/${github.context.repo.repo}', quitting...`);
-                return;
-            }
-            core.info(`Applying label "${label.name}" to issues`);
-            const payload = github.context.payload;
+            // Get Path to repository
+            core.info(`Analyzing repository at ${config.path}`);
             // Get commit messages from git
+            const payload = github.context.payload;
             const commits = git_1.getCommits(config.path, payload.before, payload.after);
             const issues = issues_1.parseIssues(commits);
-            const issueIds = issues_1.getIssueIds(issues);
-            const count = yield label_1.labelIssues(label, issueIds);
+            const infos = issues_1.getIssueInfos(issues);
+            const count = yield label_1.processIssues(infos);
             if (0 < count) {
-                core.info(`Successfully labeled ${count} issues`);
+                core.info(`Successfully labeled ${count} issue(s)`);
             }
             else {
                 core.info(`Nothing to label`);
@@ -7944,7 +7936,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.labelIssues = exports.exactLabelInfo = exports.getLabelInfo = void 0;
+exports.processIssues = exports.labelIssues = exports.exactLabelInfo = exports.getLabelInfo = void 0;
 const graphql = __importStar(__webpack_require__(138));
 const config = __importStar(__webpack_require__(618));
 const core = __importStar(__webpack_require__(470));
@@ -7963,7 +7955,7 @@ function getLabelInfo(branch, exact = false) {
         const query = `repository(name: "${config.repo}", owner: "${config.owner}") {
     labels(first: 100, query: "${match}") { nodes { id color description name } }
   }`;
-        core.info(`Looking for labels: \"${branch}\", \"${version}\", or \"${folder}\"`);
+        core.info(`Searching for labels: \"${branch}\", \"${version}\", or \"${folder}\"`);
         return graphql.Query(query).then((response) => __awaiter(this, void 0, void 0, function* () {
             let payload = response;
             let upper;
@@ -7995,7 +7987,7 @@ function exactLabelInfo(name) {
     return __awaiter(this, void 0, void 0, function* () {
         const query = `repository(name: "${config.repo}", owner: "${config.owner}") {
                      label(name: "${name}") { id color description name }}`;
-        core.info(`Looking for label: \"${name}\"`);
+        core.info(`Searching for label: \"${name}\"`);
         return graphql.Query(query).then((response) => __awaiter(this, void 0, void 0, function* () {
             return response.repository.label;
         }));
@@ -8027,6 +8019,42 @@ function labelIssues(label, iterator) {
     });
 }
 exports.labelIssues = labelIssues;
+function processIssues(iterator) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let count = 0;
+        let promise = null;
+        let label = null;
+        do {
+            const builder = Array();
+            let next = yield iterator.next();
+            while (!next.done && config.MAX_QUERY_LENGTH > builder.length) {
+                // Get Label if not yet found
+                if (null == label) {
+                    label = yield getLabelInfo(config.label);
+                    if (null == label) {
+                        core.info('No suitable label found in repository, quitting...');
+                        return 0;
+                    }
+                }
+                // Process issues
+                core.info(`Adding label '${label.name}' to Issue #${next.value.number} - "${next.value.title}"`);
+                builder.push(`_${++count}: addLabelsToLabelable(input: {labelableId: "${next.value.id}", labelIds: "${label.id}"}) { clientMutationId } `);
+                next = yield iterator.next();
+            }
+            if (null != promise) {
+                yield promise;
+            }
+            if (0 < builder.length) {
+                promise = graphql.Mutate(builder.join('\n'));
+            }
+            else {
+                promise = null;
+            }
+        } while (null != promise);
+        return count;
+    });
+}
+exports.processIssues = processIssues;
 //# sourceMappingURL=label.js.map
 
 /***/ }),

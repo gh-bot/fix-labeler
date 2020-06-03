@@ -1,8 +1,10 @@
 import * as config from './configuration'
 import {Query} from './graphql'
 
-interface IIssueInfo {
+export interface IIssueInfo {
   id: string
+  number: number
+  title: string
 }
 
 interface IRepositoryPayload {
@@ -46,9 +48,9 @@ export async function* parseIssues(
   }
 }
 
-export async function* getIssueIds(
+export async function* getIssueInfos(
   iterator: AsyncGenerator<Issue>
-): AsyncGenerator<string> {
+): AsyncGenerator<IIssueInfo> {
   let promise = null
   const set = new Set<number>()
 
@@ -64,7 +66,7 @@ export async function* getIssueIds(
     while (!next.done && config.MAX_QUERY_LENGTH > builder.length) {
       if (!set.has(next.value.number)) {
         builder.push(
-          `_${next.value.number}: issue(number: ${next.value.number}) { id }`
+          `_${next.value.number}: issue(number: ${next.value.number}) { id number title }`
         )
         set.add(next.value.number)
       }
@@ -87,7 +89,7 @@ export async function* getIssueIds(
         const response = data[property]
         if (!response) continue
 
-        yield response.id
+        yield response
       }
     }
   } while (null != promise)

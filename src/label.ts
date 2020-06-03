@@ -1,6 +1,7 @@
 import * as graphql from './graphql'
 import * as config from './configuration'
 import * as core from '@actions/core'
+import { IIssueInfo } from './issues';
 
 export interface ILabelInfo {
   id: string
@@ -46,7 +47,7 @@ export async function getLabelInfo(
     labels(first: 100, query: "${match}") { nodes { id color description name } }
   }`
 
-  core.info(`Looking for labels: \"${branch}\", \"${version}\", or \"${folder}\"`)
+  core.info(`Searching for labels: \"${branch}\", \"${version}\", or \"${folder}\"`)
   return graphql.Query(query).then(async (response) => {
     let payload = response as ILabelsPayload;
     let upper: ILabelInfo | undefined
@@ -79,12 +80,13 @@ export async function exactLabelInfo(
   const query = `repository(name: "${config.repo}", owner: "${config.owner}") {
                      label(name: "${name}") { id color description name }}`
 
-  core.info(`Looking for label: \"${name}\"`)
+  core.info(`Searching for label: \"${name}\"`)
 
   return graphql.Query(query).then(async (response) => { 
       return (response as IRepositoryPayload).repository.label
     })
 }
+
 
 export async function labelIssues(
   label: ILabelInfo,
@@ -102,6 +104,50 @@ export async function labelIssues(
           next.value
         }", labelIds: "${label.id}"}) { clientMutationId } `
       )
+      next = await iterator.next()
+    }
+
+    if (null != promise) {
+      await promise
+    }
+
+    if (0 < builder.length) {
+      promise = graphql.Mutate(builder.join('\n'))
+    } else {
+      promise = null
+    }
+  } while (null != promise)
+
+  return count
+}
+
+export async function processIssues(iterator: AsyncGenerator<IIssueInfo>): Promise<number> {
+  let count = 0
+  let promise = null
+  let label = null
+  
+  do {
+    const builder = Array<string>()
+    let next = await iterator.next()
+    while (!next.done && config.MAX_QUERY_LENGTH > builder.length) {
+
+      // Get Label if not yet found
+      if (null == label) {
+
+        label = await getLabelInfo(config.label)
+        
+        if (null == label) { 
+          core.info('No suitable label found in repository, quitting...')
+          return 0 
+        }
+      }
+
+      // Process issues
+      core.info(`Adding label '${label.name}' to Issue #${next.value.number} - "${next.value.title}"`)
+      builder.push(
+        `_${++count}: addLabelsToLabelable(input: {labelableId: "${next.value.id}", labelIds: "${label.id}"}) { clientMutationId } `
+      )
+
       next = await iterator.next()
     }
 
