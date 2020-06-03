@@ -30,7 +30,7 @@ async function run(): Promise<void> {
       return
     }
 
-    core.info(`Applying label "${config.label}" to issues`)
+    core.info(`Applying label "${label.name}" to issues`)
     const payload = github.context.payload
 
     // Get commit messages from git

@@ -46,7 +46,7 @@ export async function getLabelInfo(
     labels(first: 100, query: "${match}") { nodes { id color description name } }
   }`
 
-  core.info(`Looking for label: \"${match}\"`)
+  core.info(`Looking for labels: \"${branch}\", \"${version}\", or \"${folder}\"`)
   return graphql.Query(query).then(async (response) => {
     let payload = response as ILabelsPayload;
     let upper: ILabelInfo | undefined

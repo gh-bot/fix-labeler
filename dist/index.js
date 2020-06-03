@@ -2327,7 +2327,7 @@ function run() {
                 core.info(`No suitable label found in repository '${github.context.repo.owner}/${github.context.repo.repo}', quitting...`);
                 return;
             }
-            core.info(`Applying label "${config.label}" to issues`);
+            core.info(`Applying label "${label.name}" to issues`);
             const payload = github.context.payload;
             // Get commit messages from git
             const commits = git_1.getCommits(config.path, payload.before, payload.after);
@@ -7963,7 +7963,7 @@ function getLabelInfo(branch, exact = false) {
         const query = `repository(name: "${config.repo}", owner: "${config.owner}") {
     labels(first: 100, query: "${match}") { nodes { id color description name } }
   }`;
-        core.info(`Looking for label: \"${match}\"`);
+        core.info(`Looking for labels: \"${branch}\", \"${version}\", or \"${folder}\"`);
         return graphql.Query(query).then((response) => __awaiter(this, void 0, void 0, function* () {
             let payload = response;
             let upper;
