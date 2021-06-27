@@ -39,24 +39,24 @@
   },
   "homepage": "https://github.com/gh-bot/fix-labeler#readme",
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.4.0",
     "@actions/github": "^2.2.0",
-    "semantic-release": "^17.0.7"
+    "semantic-release": "^17.4.4"
   },
   "devDependencies": {
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.38",
-    "@typescript-eslint/parser": "^2.33.0",
+    "@types/node": "^12.20.15",
+    "@typescript-eslint/parser": "^2.34.0",
     "@zeit/ncc": "^0.20.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "eslint": "^5.16.0",
     "eslint-plugin-github": "^2.0.0",
     "eslint-plugin-jest": "^22.21.0",
     "jest": "^25.5.4",
     "jest-circus": "^24.9.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.1",
     "prettier": "^1.19.1",
     "ts-jest": "^25.5.1",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.10"
   }
 }
