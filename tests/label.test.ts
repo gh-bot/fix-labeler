@@ -10,7 +10,6 @@ test('testing label <master>', async () => {
   expect(result?.name).toEqual('master')
 })
 
-
 test('testing label <xxx/2.0.0>', async () => {
   const result = await getLabelInfo('xxx/2.0.0')
   expect(result).toBeNull()
@@ -25,7 +24,6 @@ test('testing label <test-2.0.0>', async () => {
   const result = await getLabelInfo('test-2.0.0')
   expect(result?.name).toEqual('test')
 })
-
 
 test('testing label <test/1.0.0>', async () => {
   const result = await getLabelInfo('test/1.0.0')

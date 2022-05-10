@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import * as config from './configuration'
 import {Query} from './graphql'
 
@@ -35,13 +36,16 @@ export class Issue {
   }
 }
 
-const rgx = /(?:^|(?<= |\t|,|\.|;|"|'|`))(close|closes|closed|fixed|fix|fixes|resolve|resolves|resolved)\s+([0-9a-zA-Z'\-_]*)(?:\/*)([0-9a-zA-Z'\-_]*)#(\d+)/gim
+const rgx =
+  /(?:^|(?<= |\t|,|\.|;|"|'|`))(close|closes|closed|fixed|fix|fixes|resolve|resolves|resolved)\s+([0-9a-zA-Z'\-_]*)(?:\/*)([0-9a-zA-Z'\-_]*)#(\d+)/gim
 
 export async function* parseIssues(
   iterator: AsyncGenerator<string>
 ): AsyncGenerator<Issue> {
   for await (const buffer of iterator) {
+    core.info(`scanning commit: ${buffer}`)
     const matches = buffer.matchAll(rgx)
+    core.info(`matches found: ${matches}`)
     for (const match of matches) {
       yield new Issue(match)
     }
@@ -73,10 +77,12 @@ export async function* getIssueInfos(
 
       next = await iterator.next()
     }
+    core.info(`builder after loop: ${builder}`)
 
     if (0 < builder.length) {
       const body = builder.join('\n')
       const query = `repository(owner: "${config.owner}", name: "${config.repo}") {\n${body}\n}`
+      core.info(`query sending: ${query}`)
       promise = Query(query).then(response => {
         return (response as IRepositoryPayload).repository
       })

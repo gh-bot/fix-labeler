@@ -104,3 +104,7 @@ typings/
 .tern-port
 /lib
 /package-lock.json
+
+.DS_Store
+yarn.lock
+*.code-workspace
