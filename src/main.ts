@@ -27,6 +27,7 @@ async function run(): Promise<void> {
       `getting commits with: ${config.path} ${payload.before} ${payload.after}`
     )
     const commits = getCommits(config.path, payload.before, payload.after)
+    core.info(`got: ${commits}`)
     const issues = parseIssues(commits)
     const infos = getIssueInfos(issues)
     const count = await processIssues(infos)

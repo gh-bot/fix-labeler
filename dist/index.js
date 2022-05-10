@@ -2598,6 +2598,7 @@ function run() {
             const payload = github.context.payload;
             core.info(`getting commits with: ${config.path} ${payload.before} ${payload.after}`);
             const commits = git_1.getCommits(config.path, payload.before, payload.after);
+            core.info(`got: ${commits}`);
             const issues = issues_1.parseIssues(commits);
             const infos = issues_1.getIssueInfos(issues);
             const count = yield label_1.processIssues(infos);
