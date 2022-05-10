@@ -7,7 +7,6 @@ async function* getData(): AsyncGenerator<Issue> {
   yield new Issue(['x', 'y', 'gh-bot', 'fix-labeler', '1'])
 }
 
-
 test('test getting Issue Infos', async () => {
   const iterator = getIssueInfos(getData())
 
